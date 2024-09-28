@@ -77,7 +77,8 @@ issuer:
   name: ''
   spec:
     acme:
-       server: 'https://acme-v02.api.letsencrypt.org/directory'
+      # The ACME server URL for staging. Use 'https://acme-v02.api.letsencrypt.org/directory' for production
+       server: 'https://acme-staging-v02.api.letsencrypt.org/directory'
        email: 'wipittechecom@carhartt-wip.com'
        privateKeySecretRefName: ''
        ingressClassName: 'nginx'
