@@ -70,7 +70,7 @@ ingress:
   #      - chart-example.local
 
 
-## Cert Manager configuration
+## Issuer for Cert Manager configuration
 issuer:
   type: 'ClusterIssuer'
   enabled: false
