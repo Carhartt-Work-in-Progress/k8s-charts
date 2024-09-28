@@ -51,14 +51,36 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   path: '/*'
-  hosts:
-    - 'service-name.local'
-  ingressClassName: ''
+  ingressClassName: 'gce'
+  rules:
+    - host: example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: example-service
+                port:
+                  number: 80
+
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
 
+
+## Cert Manager configuration
+issuer:
+  type: 'ClusterIssuer'
+  enabled: false
+  name: ''
+  spec:
+    acme:
+       server: 'https://acme-v02.api.letsencrypt.org/directory'
+       email: 'wipittechecom@carhartt-wip.com'
+       privateKeySecretRefName: ''
+       ingressClassName: 'nginx'
 ## specifies the configuration for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 livenessProbe:
