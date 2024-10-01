@@ -1,45 +1,3 @@
-image:
-  # 'commercetoolsps/commercetools-paypal-plus-integration'
-  repository: 'MUST_BE_OVERRIDDEN'
-  # 'v0.4.0'
-  tag: 'MUST_BE_OVERRIDDEN'
-  pullPolicy: 'IfNotPresent'
-
-replicaCount: 1
-
-# specifies that application is accessible outside the cluster
-service:
-  type: 'NodePort'
-  port: 80
-
-## specifies the port to access the application within the container.
-containerPort: 8080
-
-## specifies the strategy used to replace old Pods by new ones.
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-updateStrategy:
-  type: 'RollingUpdate'
-  rollingUpdate:
-    maxSurge: 1
-    maxUnavailable: 0
-
-## specifies the minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing, for it to be considered available.
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#min-ready-seconds
-minReadySeconds: 5
-
-## specifies the resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-resources: {}
-#  requests:
-#    cpu: 100m
-#    memory: 300Mi
-#  limits:
-#    cpu: 100m
-#    memory: 400Mi
-
-## non sensitive environment variables
-nonSensitiveEnvs: {}
-
 ## sensitive environment variables
 sensitiveEnvs: {}
 
@@ -49,39 +7,19 @@ ingress:
   enabled: false
   annotations: {}
     # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  # kubernetes.io/tls-acme: "true"
   path: '/*'
-  ingressClassName: 'gce'
-  rules:
-    - host: example.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: example-service
-                port:
-                  number: 80
-
+  hosts:
+    - 'service-name.local'
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
 
-
-## Issuer for Cert Manager configuration
-issuer:
-  type: 'ClusterIssuer'
+nginx:
   enabled: false
-  name: ''
-  spec:
-    acme:
-      # The ACME server URL for staging. Use 'https://acme-v02.api.letsencrypt.org/directory' for production
-       server: 'https://acme-staging-v02.api.letsencrypt.org/directory'
-       email: 'wipittechecom@carhartt-wip.com'
-       privateKeySecretRefName: ''
-       ingressClassName: 'nginx'
+  name: nginx
+  port: 8080
 ## specifies the configuration for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 livenessProbe:
