@@ -12,8 +12,19 @@ data:
   nginx.conf: |
     events {}
     http {
+
+
      server {
-       listen {{ .Values.nginx.port }};
+        listen {{ .Values.nginx.port }};
+        location = /healthz {
+         gzip off;
+         auth_basic off;
+         # skip flooding logs of the health-check
+         access_log off;
+         #return http-status 200
+         return 200 "nginx for service  {{ template "public-service.fullname" . }} is healthy\n";
+    }
+
        location / {
          auth_basic "Protected Area";
          auth_basic_user_file /etc/nginx/.htpasswd;

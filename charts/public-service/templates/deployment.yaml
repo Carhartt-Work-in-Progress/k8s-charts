@@ -75,6 +75,21 @@ spec:
           ports:
           - name: nginx-port
             containerPort: {{ .Values.nginx.port }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: nginx-port
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: nginx-port
+            periodSeconds: 15
+            timeoutSeconds: 10
+            failureThreshold: 3
           volumeMounts:
             - name: {{ .Values.nginx.name }}-config
               mountPath: /etc/nginx/nginx.conf
