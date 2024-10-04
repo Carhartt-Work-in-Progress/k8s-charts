@@ -23,6 +23,9 @@ spec:
         release: {{ .Release.Name }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- if .Values.nginx.enabled }}
+        checksum/nginx-config: {{ include (print $.Template.BasePath "/nginx-config-map.yaml") . | sha256sum }}
+        {{- end }}
     spec:
       {{- if .Values.affinity.enabled }}
       affinity:
