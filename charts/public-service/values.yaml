@@ -13,6 +13,8 @@ containerPort: 8080
 ##
 ingress:
   enabled: false
+  basicAuth:
+    enabled: false
   annotations: {}
     # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
