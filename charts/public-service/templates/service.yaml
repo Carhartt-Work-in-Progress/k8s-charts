@@ -13,7 +13,7 @@ spec:
     app: {{ template "public-service.name" . }}
     release: {{ .Release.Name }}
   ports:
-  - port: {{ .Values.service.port }}
-    targetPort: container-port
-    protocol: TCP
-    name: service-port
+    - port: {{ .Values.service.port }}
+      targetPort: container-port
+      protocol: TCP
+      name: service-port

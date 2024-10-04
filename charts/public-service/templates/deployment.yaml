@@ -39,48 +39,48 @@ spec:
                 topologyKey: "kubernetes.io/hostname"
       {{- end }}
       containers:
-      - name: {{ .Chart.Name }}
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        ports:
-        - name: container-port
-          containerPort: {{ .Values.containerPort }}
-        # Inject (non sensitive) environment variables from the `Values` config.
-        env:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: container-port
+              containerPort: {{ .Values.containerPort }}
+          # Inject (non sensitive) environment variables from the `Values` config.
+          env:
         {{- range $key, $val := .Values.nonSensitiveEnvs }}
-        - name: {{ $key }}
-          value: {{ $val | quote }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
         {{- end}}
-        # Inject (sensitive) environment variables from `Values` config, referring
-        # them from the related Secret object. This is an extra measure of security
-        # to avoid having credentials displayed in plain text in the template file.
-        # https://kubernetes.io/docs/concepts/configuration/secret/
+            # Inject (sensitive) environment variables from `Values` config, referring
+            # them from the related Secret object. This is an extra measure of security
+            # to avoid having credentials displayed in plain text in the template file.
+            # https://kubernetes.io/docs/concepts/configuration/secret/
         {{- $chartName := include "public-service.fullname" . -}}
         {{- range $key, $val := .Values.sensitiveEnvs }}
-        - name: {{ $key }}
-          valueFrom:
-            secretKeyRef:
-              name: {{ $chartName }}-secret
-              key: {{ $key }}
+            - name: {{ $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $chartName }}-secret
+                  key: {{ $key }}
         {{- end}}
-        livenessProbe:
+          livenessProbe:
 {{ toYaml .Values.livenessProbe | indent 10 }}
-        readinessProbe:
+          readinessProbe:
 {{ toYaml .Values.readinessProbe | indent 10 }}
-        resources:
+          resources:
 {{ toYaml .Values.resources | indent 10 }}
       {{- if .Values.nginx.enabled }}
-      - name: nginx
-        image: nginx:latest
-        ports:
-        - name: nginx-port
-          containerPort: {{ .Values.nginx.port }}
-        volumeMounts:
-          - name: {{ .Values.nginx.name }}-config
-            mountPath: /etc/nginx/nginx.conf
-            subPath: nginx.conf
-          - name: {{ .Values.nginx.name }}-htpasswd-secret
-            mountPath: /etc/nginx/.htpasswd
+        - name: nginx
+          image: nginx:latest
+          ports:
+          - name: nginx-port
+            containerPort: {{ .Values.nginx.port }}
+          volumeMounts:
+            - name: {{ .Values.nginx.name }}-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: {{ .Values.nginx.name }}-htpasswd-secret
+              mountPath: /etc/nginx/.htpasswd
       volumes:
         - name: {{ .Values.nginx.name }}-config
           configMap:
@@ -88,4 +88,4 @@ spec:
         - name: {{ .Values.nginx.name }}-htpasswd-secret
           secret:
             secretName: {{ .Values.nginx.name }}-htpasswd-secret
-      {{- end }}
+        {{- end }}
