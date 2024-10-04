@@ -98,7 +98,7 @@ spec:
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
             - name: {{ .Values.nginx.name }}-htpasswd-secret
-              mountPath: /etc/nginx/.htpasswd
+              mountPath: "/etc/nginx/auth"
       volumes:
         - name: {{ .Values.nginx.name }}-config
           configMap:

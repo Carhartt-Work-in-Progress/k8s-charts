@@ -28,7 +28,7 @@ data:
        location / {
          {{- if .Values.nginx.basicAuth.enabled}}
          auth_basic "Protected Area for service {{ template "public-service.fullname" . }}";
-         auth_basic_user_file /etc/nginx/.htpasswd;
+         auth_basic_user_file /etc/nginx/auth/htpasswd;
          {{- end }}
          proxy_set_header X-Forwarded-Host $host;
          proxy_set_header X-Forwarded-Server $host;
