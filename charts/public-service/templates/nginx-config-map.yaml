@@ -26,9 +26,16 @@ data:
     }
 
        location / {
-         auth_basic "Protected Area";
+         auth_basic "Protected Area for service {{ template "public-service.fullname" . }}";
          auth_basic_user_file /etc/nginx/.htpasswd;
-         proxy_pass http://127.0.0.1:{{ .Values.containerPort }};  # Forward to your application
+         proxy_set_header X-Forwarded-Host $host;
+         proxy_set_header X-Forwarded-Server $host;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-Proto $scheme;
+         proxy_set_header Host $http_host;
+         ####
+        proxy_pass http://localhost:{{ .Values.containerPort }}; #forward to your application
        }
      }
     }
