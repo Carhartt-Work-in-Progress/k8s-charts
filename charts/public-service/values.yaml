@@ -1,6 +1,8 @@
 ## sensitive environment variables
 sensitiveEnvs: {}
 
+service:
+  port: 80
 ## Ingress annotations
 ##
 ingress:
