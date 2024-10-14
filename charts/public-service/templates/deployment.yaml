@@ -80,7 +80,7 @@ spec:
             containerPort: {{ .Values.nginx.port }}
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /livez
               port: nginx-port
             initialDelaySeconds: 30
             periodSeconds: 10
@@ -88,7 +88,7 @@ spec:
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: /readyz
               port: nginx-port
             periodSeconds: 15
             timeoutSeconds: 10

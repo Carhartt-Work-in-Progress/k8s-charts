@@ -26,15 +26,11 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-nginx:
-  enabled: false
-  name: nginx
-  port: 8080
-## specifies the configuration for liveness and readiness probes
+## specifies the configuration for liveness and readiness probes for the service
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 livenessProbe:
   httpGet:
-    path: '/livez'
+    path: '/health'
     port: 'container-port'
   initialDelaySeconds: 15
   periodSeconds: 10
@@ -43,13 +39,20 @@ livenessProbe:
   failureThreshold: 5
 readinessProbe:
   httpGet:
-    path: '/readyz'
+    path: '/health'
     port: 'container-port'
   initialDelaySeconds: 5
   periodSeconds: 10
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 5
+
+ # enable/disable nginx as a sidecar
+nginx:
+  enabled: false
+  name: nginx
+  port: 8080
+
 
 ## enable/disable affinity rules for k8 component scheduling
 affinity:
