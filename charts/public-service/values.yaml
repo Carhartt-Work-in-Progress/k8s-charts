@@ -34,7 +34,7 @@ nginx:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 livenessProbe:
   httpGet:
-    path: '/health'
+    path: '/livez'
     port: 'container-port'
   initialDelaySeconds: 15
   periodSeconds: 10
@@ -43,7 +43,7 @@ livenessProbe:
   failureThreshold: 5
 readinessProbe:
   httpGet:
-    path: '/health'
+    path: '/readyz'
     port: 'container-port'
   initialDelaySeconds: 5
   periodSeconds: 10

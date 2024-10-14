@@ -16,13 +16,23 @@ data:
 
      server {
         listen {{ .Values.nginx.port }};
-        location = /healthz {
+
+        location = /readyz {
          gzip off;
          auth_basic off;
          # skip flooding logs of the health-check
          access_log off;
          #return http-status 200
-         return 200 "nginx for service  {{ template "public-service.fullname" . }} is healthy\n";
+         return 200 "nginx for service  {{ template "public-service.fullname" . }} is ready\n";
+    }
+
+        location = /livez {
+         gzip off;
+         auth_basic off;
+         # skip flooding logs of the health-check
+         access_log off;
+         #return http-status 200
+         return 200 "nginx for service  {{ template "public-service.fullname" . }} is live\n";
     }
 
        location / {
