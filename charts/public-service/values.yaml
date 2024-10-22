@@ -1,11 +1,5 @@
-image:
-  # 'commercetoolsps/commercetools-paypal-plus-integration'
-  repository: 'MUST_BE_OVERRIDDEN'
-  # 'v0.4.0'
-  tag: 'MUST_BE_OVERRIDDEN'
-  pullPolicy: 'IfNotPresent'
-
-replicaCount: 1
+## sensitive environment variables
+sensitiveEnvs: {}
 
 # specifies that application is accessible outside the cluster
 service:
@@ -15,41 +9,15 @@ service:
 ## specifies the port to access the application within the container.
 containerPort: 8080
 
-## specifies the strategy used to replace old Pods by new ones.
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-updateStrategy:
-  type: 'RollingUpdate'
-  rollingUpdate:
-    maxSurge: 1
-    maxUnavailable: 0
-
-## specifies the minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing, for it to be considered available.
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#min-ready-seconds
-minReadySeconds: 5
-
-## specifies the resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-resources: {}
-#  requests:
-#    cpu: 100m
-#    memory: 300Mi
-#  limits:
-#    cpu: 100m
-#    memory: 400Mi
-
-## non sensitive environment variables
-nonSensitiveEnvs: {}
-
-## sensitive environment variables
-sensitiveEnvs: {}
-
 ## Ingress annotations
 ##
 ingress:
   enabled: false
+  basicAuth:
+    enabled: false
   annotations: {}
     # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  # kubernetes.io/tls-acme: "true"
   path: '/*'
   hosts:
     - 'service-name.local'
@@ -58,7 +26,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-## specifies the configuration for liveness and readiness probes
+## specifies the configuration for liveness and readiness probes for the service
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 livenessProbe:
   httpGet:
@@ -78,6 +46,13 @@ readinessProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 5
+
+ # enable/disable nginx as a sidecar
+nginx:
+  enabled: false
+  name: nginx
+  port: 8080
+
 
 ## enable/disable affinity rules for k8 component scheduling
 affinity:

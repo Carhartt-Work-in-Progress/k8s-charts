@@ -1,0 +1,54 @@
+{{- if .Values.nginx.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.nginx.name }}-config
+  labels:
+    app: {{ template "public-service.name" . }}
+    chart: {{ template "public-service.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  nginx.conf: |
+    events {}
+    http {
+
+
+     server {
+        listen {{ .Values.nginx.port }};
+
+        location = /readyz {
+         gzip off;
+         auth_basic off;
+         # skip flooding logs of the health-check
+         access_log off;
+         #return http-status 200
+         return 200 "nginx for service  {{ template "public-service.fullname" . }} is ready\n";
+    }
+
+        location = /livez {
+         gzip off;
+         auth_basic off;
+         # skip flooding logs of the health-check
+         access_log off;
+         #return http-status 200
+         return 200 "nginx for service  {{ template "public-service.fullname" . }} is live\n";
+    }
+
+       location / {
+         {{- if .Values.nginx.basicAuth.enabled}}
+         auth_basic "Protected Area for service {{ template "public-service.fullname" . }}";
+         auth_basic_user_file /etc/nginx/auth/htpasswd;
+         {{- end }}
+         proxy_set_header X-Forwarded-Host $host;
+         proxy_set_header X-Forwarded-Server $host;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-Proto $scheme;
+         proxy_set_header Host $http_host;
+         ####
+        proxy_pass http://localhost:{{ .Values.containerPort }}; #forward to your application
+       }
+     }
+    }
+{{- end }}

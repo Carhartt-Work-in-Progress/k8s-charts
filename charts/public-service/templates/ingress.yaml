@@ -35,10 +35,10 @@ spec:
             backend:
               service:
                 name: {{ $fullName }}
-                port: 
+                port:
                   name: service-port
   {{- end }}
-  # If no hosts are defined, a default path for the backend mapping has to be defined
+    # If no hosts are defined, a default path for the backend mapping has to be defined
   {{- if not  .Values.ingress.hosts }}
     - http:
         paths:
@@ -47,7 +47,7 @@ spec:
             backend:
               service:
                 name: {{ $fullName }}
-                port: 
+                port:
                   name: service-port
 
 {{- end }}
