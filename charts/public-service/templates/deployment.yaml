@@ -89,7 +89,7 @@ spec:
           image: {{ .Values.cloudSql.image.repository }}:{{ .Values.cloudSql.image.tag }}
           args:
             - "--structured-logs"
-            - "{{ .Values.cloudSql.instanceConnectionName }}"
+            - {{ required "cloudSql.instanceConnectionName is required when cloudSql.enabled is true" .Values.cloudSql.instanceConnectionName | quote }}
           securityContext:
             runAsNonRoot: true
           resources:
