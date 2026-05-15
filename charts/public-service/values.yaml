@@ -65,3 +65,14 @@ pdb:
 # Google managed certificates for publicly exposed services
 managecertificate:
   enabled: false
+
+## Cloud SQL proxy sidecar
+## ref: https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine
+cloudSql:
+  enabled: false
+  ## Cloud SQL instance connection name (project:region:instance)
+  instanceConnectionName: 'project:region:instance'
+  image:
+    repository: 'gcr.io/cloud-sql-connectors/cloud-sql-proxy'
+    tag: '2.11.4'
+  resources: {}
