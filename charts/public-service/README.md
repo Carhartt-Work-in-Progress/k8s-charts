@@ -90,6 +90,11 @@ The chart can be customized using the following configurable parameters:
 | `startupProbe` | startup probe configuration to protect slow starting containers. | `{}` |
 | `lifecycle` | lifecycle hooks configuration (e.g., preStop for graceful shutdown). | `{}` |
 | `pdb.spec.maxUnavailable` | number of unhealthy replicas allowed at most during voluntary pod eviction among the total number of desired replicas. | `10%` |
+| `cloudSql.enabled` | if true, a Cloud SQL Auth Proxy sidecar container is added to the pod. | `false` |
+| `cloudSql.instanceConnectionName` | Cloud SQL instance connection name in the format `project:region:instance`. Required when `cloudSql.enabled` is `true`. | `""` |
+| `cloudSql.image.repository` | Cloud SQL proxy image repository. | `gcr.io/cloud-sql-connectors/cloud-sql-proxy` |
+| `cloudSql.image.tag` | Cloud SQL proxy image tag. | `2.11.4` |
+| `cloudSql.resources` | resource requests and limits for the Cloud SQL proxy sidecar. | `{}` |
 
 Specify parameters using `--set key=value[,key=value]` argument to `helm upgrade --install`
 
