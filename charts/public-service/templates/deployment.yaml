@@ -27,6 +27,9 @@ spec:
         checksum/nginx-config: {{ include (print $.Template.BasePath "/nginx-config-map.yaml") . | sha256sum }}
         {{- end }}
     spec:
+      {{- if .Values.serviceAccountName }}
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      {{- end }}
       {{- if .Values.affinity.enabled }}
       affinity:
         podAntiAffinity:
