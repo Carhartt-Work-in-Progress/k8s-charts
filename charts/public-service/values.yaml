@@ -34,6 +34,12 @@ nginx:
   enabled: false
   name: nginx
   port: 8080
+  # Optional resource requests/limits for the nginx sidecar. Leave unset to preserve the
+  # previous behaviour: with no requests set, GKE Autopilot injects its 0.5 vCPU / 2Gi default.
+  # Set this to right-size the sidecar (the nginx proxy typically uses <10m CPU / ~10Mi), e.g.:
+  # resources:
+  #   requests: { cpu: 100m, memory: 256Mi }
+  #   limits:   { cpu: 250m, memory: 256Mi }
 ## specifies the configuration for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 livenessProbe:

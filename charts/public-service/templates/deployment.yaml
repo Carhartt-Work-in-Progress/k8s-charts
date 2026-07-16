@@ -125,6 +125,10 @@ spec:
               subPath: nginx.conf
             - name: {{ .Values.nginx.name }}-htpasswd-secret
               mountPath: "/etc/nginx/auth"
+          {{- with .Values.nginx.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
       volumes:
         - name: {{ .Values.nginx.name }}-config
           configMap:
